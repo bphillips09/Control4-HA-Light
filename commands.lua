@@ -1,3 +1,58 @@
+function RFP.SYNCHRONIZE(idBinding, strCommand, tParams)
+	C4:SendToProxy(5001, 'LIGHT_BRIGHTNESS_CHANGED', { LIGHT_BRIGHTNESS_CURRENT = LIGHT_LEVEL })
+end
+
+function RFP.SET_COLOR_TARGET(idBinding, strCommand, tParams)
+	local targetX = tParams.LIGHT_COLOR_TARGET_X
+	local targetY = tParams.LIGHT_COLOR_TARGET_Y
+
+	local colorServiceCall = {
+		domain = "light",
+		service = "turn_on",
+
+		service_data = {
+			xy_color = {
+				targetX, targetY
+			}
+		},
+
+		target = {
+			entity_id = EntityID
+		}
+	}
+
+	tParams = {
+		JSON = JSON:encode(colorServiceCall)
+	}
+
+	C4:SendToProxy(999, "HA_CALL_SERVICE", tParams)
+end
+
+function RFP.SET_BRIGHTNESS_TARGET(idBinding, strCommand, tParams)
+	local target = tParams.LIGHT_BRIGHTNESS_TARGET
+
+	local targetMappedValue = MapValue(target, 255, 100)
+
+	local brightnessServiceCall = {
+		domain = "light",
+		service = "turn_on",
+
+		service_data = {
+			brightness = targetMappedValue
+		},
+
+		target = {
+			entity_id = EntityID
+		}
+	}
+
+	tParams = {
+		JSON = JSON:encode(brightnessServiceCall)
+	}
+
+	C4:SendToProxy(999, "HA_CALL_SERVICE", tParams)
+end
+
 function RFP.RECEIEVE_STATE(idBinding, strCommand, tParams)
     local jsonData = JSON:decode(tParams.response)
 

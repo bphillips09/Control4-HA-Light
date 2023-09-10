@@ -1,0 +1,3 @@
+[submodule "Control4-HA-Base"]
+	path = Control4-HA-Base
+	url = https://github.com/bphillips09/Control4-HA-Base
