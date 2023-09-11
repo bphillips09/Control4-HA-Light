@@ -17,7 +17,7 @@
 				<name>Entity ID</name>
 				<type>STRING</type>
 				<readonly>false</readonly>
-				<default>light.scary_baby</default>
+				<default>light.table_lamp</default>
 			</property>
 			<property>
 				<name>Driver Version</name>
