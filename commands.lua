@@ -184,23 +184,3 @@ function Parse(data)
         C4:SendToProxy(5001, 'DYNAMIC_CAPABILITIES_CHANGED', tParams)
     end
 end
-
-function MapValue(oldValue, low, high)
-    local newValue = ((oldValue * low) / high)
-
-    return math.floor(newValue + 0.5)
-end
-
-function HasValue(tab, val)
-    for index, value in ipairs(tab) do
-        if value == val then
-            return true
-        end
-    end
-
-    return false
-end
-
-function TablesMatch(a, b)
-    return table.concat(a) == table.concat(b)
-end
