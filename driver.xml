@@ -19,7 +19,6 @@
 				<readonly>false</readonly>
 				<default>light.scary_baby</default>
 			</property>
-
 			<property>
 				<name>Driver Version</name>
 				<default></default>
@@ -45,23 +44,9 @@
 		<proxy proxybindingid="5001" name="HA Light">light_v2</proxy>
 	</proxies>
 	<capabilities>
-		<dimmer>True</dimmer>
-		<set_level>True</set_level>
-		<click_rates>False</click_rates>
-		<hold_rates>False</hold_rates>
-		<cold_start>False</cold_start>
 		<on_off>True</on_off>
-		<has_leds>False</has_leds>
-		<supports_color>True</supports_color>
-		<supports_color_correlated_temperature>True</supports_color_correlated_temperature>
+		<set_level>True</set_level>
 		<supports_target>True</supports_target>
-		<supports_broadcast_scenes>False</supports_broadcast_scenes>
-		<supports_multichannel_scenes>False</supports_multichannel_scenes>
-		<hide_proxy_properties>true</hide_proxy_properties>
-		<hide_proxy_events>false</hide_proxy_events>
-		<reduced_als_support>False</reduced_als_support>
-		<advanced_scene_support>False</advanced_scene_support>
-		<load_group_support>False</load_group_support>
 	</capabilities>
 	<events/>
 	<connections>
