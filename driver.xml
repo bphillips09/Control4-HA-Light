@@ -5,8 +5,8 @@
 	<name>HA Light</name>
 	<model>HA Light</model>
 	<created>09/10/2023 12:00</created>
-	<modified>09/10/2023 12:00</modified>
-	<version>1</version>
+	<modified>09/25/2023 12:00</modified>
+	<version>101</version>
 	<control>lua_gen</control>
 	<controlmethod>IP</controlmethod>
 	<driver>DriverWorks</driver>
@@ -44,9 +44,12 @@
 		<proxy proxybindingid="5001" name="HA Light">light_v2</proxy>
 	</proxies>
 	<capabilities>
+		<dimmer>True</dimmer>
 		<on_off>True</on_off>
+		<has_load>True</has_load>
 		<set_level>True</set_level>
 		<supports_target>True</supports_target>
+		<load_group_support>True</load_group_support>
 	</capabilities>
 	<events/>
 	<connections>

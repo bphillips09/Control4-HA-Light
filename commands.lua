@@ -65,6 +65,18 @@ function RFP.SET_BRIGHTNESS_TARGET(idBinding, strCommand, tParams)
     C4:SendToProxy(999, "HA_CALL_SERVICE", tParams)
 end
 
+function RFP.GROUP_SET_LEVEL(idBinding, strCommand, tParams)
+    tParams["LIGHT_BRIGHTNESS_TARGET"] = tParams.LEVEL
+
+    RFP:SET_BRIGHTNESS_TARGET(strCommand, tParams)
+end
+
+function RFP.GROUP_RAMP_TO_LEVEL(idBinding, strCommand, tParams)
+    tParams["LIGHT_BRIGHTNESS_TARGET"] = tParams.LEVEL
+
+    RFP:SET_BRIGHTNESS_TARGET(strCommand, tParams)
+end
+
 function RFP.RECEIEVE_STATE(idBinding, strCommand, tParams)
     local jsonData = JSON:decode(tParams.response)
 
