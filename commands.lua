@@ -2,6 +2,9 @@ SUPPORTED_ATTRIBUTES = {}
 MIN_K_TEMP = 500
 MAX_K_TEMP = 20000
 HAS_BRIGHTNESS = true
+HAS_EFFECTS = false
+LAST_EFFECT = "Select Effect"
+EFFECTS_LIST = {}
 
 function RFP.SYNCHRONIZE(idBinding, strCommand, tParams)
     C4:SendToProxy(5001, 'LIGHT_BRIGHTNESS_CHANGED', { LIGHT_BRIGHTNESS_CURRENT = LIGHT_LEVEL })
@@ -52,10 +55,11 @@ function RFP.SET_BRIGHTNESS_TARGET(idBinding, strCommand, tParams)
 
     if not HAS_BRIGHTNESS then
         brightnessServiceCall.service_data = {}
-    
-        if target == 0 then
-            brightnessServiceCall["service"] = "turn_off"
-        end
+    end
+
+    if target == 0 then
+        brightnessServiceCall.service_data = {}
+        brightnessServiceCall["service"] = "turn_off"
     end
 
     tParams = {
@@ -75,6 +79,27 @@ function RFP.GROUP_RAMP_TO_LEVEL(idBinding, strCommand, tParams)
     tParams["LIGHT_BRIGHTNESS_TARGET"] = tParams.LEVEL
 
     RFP:SET_BRIGHTNESS_TARGET(strCommand, tParams)
+end
+
+function RFP.SELECT_LIGHT_EFFECT(idBinding, strCommand, tParams)
+    local brightnessServiceCall = {
+        domain = "light",
+        service = "turn_on",
+
+        service_data = {
+            effect = tostring(tParams.value)
+        },
+
+        target = {
+            entity_id = EntityID
+        }
+    }
+
+    tParams = {
+        JSON = JSON:encode(brightnessServiceCall)
+    }
+
+    C4:SendToProxy(999, "HA_CALL_SERVICE", tParams)
 end
 
 function RFP.RECEIEVE_STATE(idBinding, strCommand, tParams)
@@ -160,6 +185,27 @@ function Parse(data)
         MAX_K_TEMP = tonumber(selectedAttribute)
     end
 
+    selectedAttribute = attributes["effect"]
+    if selectedAttribute ~= nil and LAST_EFFECT ~= selectedAttribute then
+        LAST_EFFECT = selectedAttribute
+
+        C4:SendToProxy(5001, 'EXTRAS_STATE_CHANGED', { XML = GetEffectsStateXML() }, 'NOTIFY')
+    elseif selectedAttribute == nil then
+        LAST_EFFECT = "Select Effect"
+        C4:SendToProxy(5001, 'EXTRAS_STATE_CHANGED', { XML = GetEffectsStateXML() }, 'NOTIFY')
+    end
+
+    selectedAttribute = attributes["effect_list"]
+    if selectedAttribute ~= nil and not TablesMatch(EFFECTS_LIST, selectedAttribute) then
+        EFFECTS_LIST = selectedAttribute
+        HAS_EFFECTS = true
+
+        C4:SendToProxy(5001, 'EXTRAS_SETUP_CHANGED', { XML = GetEffectsXML() }, 'NOTIFY')
+    elseif selectedAttribute == nil then
+        EFFECTS_LIST = {}
+        HAS_EFFECTS = false
+    end
+
     selectedAttribute = attributes["supported_color_modes"]
     if selectedAttribute ~= nil and not TablesMatch(SUPPORTED_ATTRIBUTES, selectedAttribute) then
         SUPPORTED_ATTRIBUTES = selectedAttribute
@@ -190,9 +236,29 @@ function Parse(data)
             supports_color = hasColor,
             supports_color_correlated_temperature = hasCCT,
             color_correlated_temperature_min = MIN_K_TEMP,
-            color_correlated_temperature_max = MAX_K_TEMP
+            color_correlated_temperature_max = MAX_K_TEMP,
+            has_extras = HAS_EFFECTS
         }
 
         C4:SendToProxy(5001, 'DYNAMIC_CAPABILITIES_CHANGED', tParams)
     end
+end
+
+function GetEffectsStateXML()
+    return '<extras_state><extra><object id="effect" value="' .. LAST_EFFECT .. '"/></extra></extras_state>'
+end
+
+function GetEffectsXML()
+    local extras = ""
+    local items = ""
+
+    extras =
+        '<extras_setup><extra><section label="Effects"><object type="list" id="effect" label="Effect" command="SELECT_LIGHT_EFFECT" value="'
+        .. LAST_EFFECT .. '"><list maxselections="1" minselections="1">'
+
+    for _, effect in pairs(EFFECTS_LIST) do
+        items = items .. '<item text="' .. effect .. '" value="' .. effect .. '"/>'
+    end
+
+    return extras .. items .. '</list></object></section></extra></extras_setup>'
 end
