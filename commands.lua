@@ -5,9 +5,34 @@ HAS_BRIGHTNESS = true
 HAS_EFFECTS = false
 LAST_EFFECT = "Select Effect"
 EFFECTS_LIST = {}
+WAS_ON = false
 
 function RFP.SYNCHRONIZE(idBinding, strCommand, tParams)
     C4:SendToProxy(5001, 'LIGHT_BRIGHTNESS_CHANGED', { LIGHT_BRIGHTNESS_CURRENT = LIGHT_LEVEL })
+end
+
+function RFP.BUTTON_ACTION(idBinding, strCommand, tParams)
+    if tParams.ACTION == "2" then
+        if tParams.BUTTON_ID == "0" then
+            SetLightValue(100)
+        elseif tParams.BUTTON_ID == "1" then
+            SetLightValue(0)
+        else
+            if WAS_ON then
+                SetLightValue(0)
+            else
+                SetLightValue(100)
+            end
+        end
+    end
+end
+
+function SetLightValue(value)
+    local tParams = {
+        LIGHT_BRIGHTNESS_TARGET = value
+    }
+
+    RFP.SET_BRIGHTNESS_TARGET(nil, nil, tParams)
 end
 
 function RFP.SET_COLOR_TARGET(idBinding, strCommand, tParams)
@@ -146,9 +171,13 @@ function Parse(data)
 
     if state ~= nil then
         if state == "off" then
+            WAS_ON = false
             C4:SendToProxy(5001, 'LIGHT_BRIGHTNESS_CHANGED', { LIGHT_BRIGHTNESS_CURRENT = 0 })
         elseif state == "on" and not HAS_BRIGHTNESS then
+            WAS_ON = true
             C4:SendToProxy(5001, 'LIGHT_BRIGHTNESS_CHANGED', { LIGHT_BRIGHTNESS_CURRENT = 100 })
+        elseif state == "on" then
+            WAS_ON = true
         end
     end
 
