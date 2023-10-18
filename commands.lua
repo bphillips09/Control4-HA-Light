@@ -94,6 +94,12 @@ function RFP.SET_BRIGHTNESS_TARGET(idBinding, strCommand, tParams)
     C4:SendToProxy(999, "HA_CALL_SERVICE", tParams)
 end
 
+function RFP.SET_LEVEL(idBinding, strCommand, tParams)
+    tParams["LIGHT_BRIGHTNESS_TARGET"] = tParams.LEVEL
+
+    RFP:SET_BRIGHTNESS_TARGET(strCommand, tParams)
+end
+
 function RFP.GROUP_SET_LEVEL(idBinding, strCommand, tParams)
     tParams["LIGHT_BRIGHTNESS_TARGET"] = tParams.LEVEL
 
@@ -247,7 +253,9 @@ function Parse(data)
             HAS_BRIGHTNESS = false
         elseif HasValue(SUPPORTED_ATTRIBUTES, "brightness") then
             HAS_BRIGHTNESS = true
-        else
+        end
+
+        if GetStatesHasColor() then
             hasColor = true
 
             if HasValue(SUPPORTED_ATTRIBUTES, "color_temp") then
@@ -262,6 +270,8 @@ function Parse(data)
 
         local tParams = {
             dimmer = HAS_BRIGHTNESS,
+            set_level = HAS_BRIGHTNESS,
+            supports_target = HAS_BRIGHTNESS,
             supports_color = hasColor,
             supports_color_correlated_temperature = hasCCT,
             color_correlated_temperature_min = MIN_K_TEMP,
@@ -269,8 +279,13 @@ function Parse(data)
             has_extras = HAS_EFFECTS
         }
 
-        C4:SendToProxy(5001, 'DYNAMIC_CAPABILITIES_CHANGED', tParams)
+        C4:SendToProxy(5001, 'DYNAMIC_CAPABILITIES_CHANGED', tParams, "NOTIFY")
     end
+end
+
+function GetStatesHasColor()
+    return HasValue(SUPPORTED_ATTRIBUTES, "color_temp") or HasValue(SUPPORTED_ATTRIBUTES, "hs") or HasValue(SUPPORTED_ATTRIBUTES, "xy") or HasValue(SUPPORTED_ATTRIBUTES, "rgb")
+    or HasValue(SUPPORTED_ATTRIBUTES, "rgbw") or HasValue(SUPPORTED_ATTRIBUTES, "rgbww")
 end
 
 function GetEffectsStateXML()

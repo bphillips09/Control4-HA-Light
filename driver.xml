@@ -5,8 +5,8 @@
 	<name>HA Light</name>
 	<model>HA Light</model>
 	<created>09/10/2023 12:00</created>
-	<modified>10/08/2023 12:00</modified>
-	<version>102</version>
+	<modified>10/17/2023 12:00</modified>
+	<version>104</version>
 	<control>lua_gen</control>
 	<controlmethod>IP</controlmethod>
 	<driver>DriverWorks</driver>
@@ -50,6 +50,8 @@
 		<set_level>True</set_level>
 		<supports_target>True</supports_target>
 		<load_group_support>True</load_group_support>
+		<brightness_rate_min>0</brightness_rate_min>
+		<brightness_rate_max>100000</brightness_rate_max>
 	</capabilities>
 	<events/>
 	<connections>
@@ -78,6 +80,51 @@
 			<classes>
 				<class>
 					<classname>LIGHT_V2</classname>
+				</class>
+			</classes>
+		</connection>
+		<connection>
+			<id>200</id>
+			<facing>6</facing>
+			<connectionname>Top Button Link</connectionname>
+			<type>1</type>
+			<consumer>False</consumer>
+			<audiosource>False</audiosource>
+			<videosource>False</videosource>
+			<linelevel>True</linelevel>
+			<classes>
+				<class>
+					<classname>BUTTON_LINK</classname>
+				</class>
+			</classes>
+		</connection>
+		<connection>
+			<id>201</id>
+			<facing>6</facing>
+			<connectionname>Bottom Button Link</connectionname>
+			<type>1</type>
+			<consumer>False</consumer>
+			<audiosource>False</audiosource>
+			<videosource>False</videosource>
+			<linelevel>True</linelevel>
+			<classes>
+				<class>
+					<classname>BUTTON_LINK</classname>
+				</class>
+			</classes>
+		</connection>
+		<connection>
+			<id>202</id>
+			<facing>6</facing>
+			<connectionname>Toggle Button Link</connectionname>
+			<type>1</type>
+			<consumer>False</consumer>
+			<audiosource>False</audiosource>
+			<videosource>False</videosource>
+			<linelevel>True</linelevel>
+			<classes>
+				<class>
+					<classname>BUTTON_LINK</classname>
 				</class>
 			</classes>
 		</connection>
