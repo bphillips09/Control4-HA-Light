@@ -27,6 +27,31 @@ function RFP.BUTTON_ACTION(idBinding, strCommand, tParams)
     end
 end
 
+function RFP.DO_PUSH(idBinding, strCommand, tParams)
+    --Do nothing for now
+end
+
+function RFP.DO_RELEASE(idBinding, strCommand, tParams)
+    --Do nothing for now
+end
+
+function RFP.DO_CLICK(idBinding, strCommand, tParams)
+    local tParams = {
+        ACTION = "2",
+        BUTTON_ID = ""
+    }
+    
+    if idBinding == 200 then
+        tParams.BUTTON_ID = "0"
+    elseif idBinding == 201 then
+        tParams.BUTTON_ID = "1"
+    elseif idBinding == 202 then
+        tParams.BUTTON_ID = "2"
+    end
+
+    RFP:BUTTON_ACTION(strCommand, tParams)
+end
+
 function SetLightValue(value)
     local tParams = {
         LIGHT_BRIGHTNESS_TARGET = value
