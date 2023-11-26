@@ -29,14 +29,18 @@ end
 
 function RFP.PUSH_SCENE(idBinding, strCommand, tParams)
     local scene_value = C4:ParseXml(tParams.ELEMENTS)
-    C4:PersistSetValue("ALS:" .. tParams.SCENE_ID, scene_value["ChildNodes"][3]["Value"], false) 
-    print("Saving Advanced Lighting Scene " .. tParams.SCENE_ID)
+    C4:PersistSetValue("ALS:" .. tParams.SCENE_ID, scene_value, false) 
 end
 
 function RFP.ACTIVATE_SCENE(idBinding, strCommand, tParams)
     local scene_value = C4:PersistGetValue("ALS:" .. tParams.SCENE_ID, false) 
     print("Loading Advanced Lighting Scene " .. tParams.SCENE_ID)
-    SetLightValue(scene_value)
+    for _, v in pairs(scene_value["ChildNodes"]) do
+        if v["Name"] == "level" then
+            SetLightValue(v["Value"]) 
+            break
+        end
+    end
 end
 
 function RFP.ON(idBinding, strCommand, tParams)
