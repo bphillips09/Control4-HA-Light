@@ -27,6 +27,14 @@ function RFP.BUTTON_ACTION(idBinding, strCommand, tParams)
     end
 end
 
+function RFP.ON(idBinding, strCommand, tParams)
+    SetLightValue(100)
+end
+
+function RFP.OFF(idBinding, strCommand, tParams)
+    SetLightValue(0)
+end
+
 function RFP.DO_PUSH(idBinding, strCommand, tParams)
     --Do nothing for now
 end
