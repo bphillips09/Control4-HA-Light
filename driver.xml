@@ -5,8 +5,8 @@
 	<name>HA Light</name>
 	<model>HA Light</model>
 	<created>09/10/2023 12:00</created>
-	<modified>10/22/2023 12:00</modified>
-	<version>105</version>
+	<modified>11/26/2023 12:00</modified>
+	<version>106</version>
 	<control>lua_gen</control>
 	<controlmethod>IP</controlmethod>
 	<driver>DriverWorks</driver>
