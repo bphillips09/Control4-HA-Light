@@ -27,6 +27,18 @@ function RFP.BUTTON_ACTION(idBinding, strCommand, tParams)
     end
 end
 
+function RFP.PUSH_SCENE(idBinding, strCommand, tParams)
+    local scene_value = C4:ParseXml(tParams.ELEMENTS)
+    C4:PersistSetValue("ALS:" .. tParams.SCENE_ID, scene_value["ChildNodes"][3]["Value"], false) 
+    print("Saving Advanced Lighting Scene " .. tParams.SCENE_ID)
+end
+
+function RFP.ACTIVATE_SCENE(idBinding, strCommand, tParams)
+    local scene_value = C4:PersistGetValue("ALS:" .. tParams.SCENE_ID, false) 
+    print("Loading Advanced Lighting Scene " .. tParams.SCENE_ID)
+    SetLightValue(scene_value)
+end
+
 function RFP.ON(idBinding, strCommand, tParams)
     SetLightValue(100)
 end
