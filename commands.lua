@@ -45,7 +45,7 @@ function RFP.ON(idBinding, strCommand, tParams)
 end
 
 function RFP.OFF(idBinding, strCommand, tParams)
-    local turnOnServiceCall = {
+    local turnOffServiceCall = {
         domain = "light",
         service = "turn_off",
 
@@ -56,7 +56,7 @@ function RFP.OFF(idBinding, strCommand, tParams)
         }
     }
     tParams = {
-        JSON = JSON:encode(turnOnServiceCall)
+        JSON = JSON:encode(turnOffServiceCall)
     }
     C4:SendToProxy(999, "HA_CALL_SERVICE", tParams)
 end
