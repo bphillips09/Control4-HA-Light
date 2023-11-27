@@ -27,6 +27,40 @@ function RFP.BUTTON_ACTION(idBinding, strCommand, tParams)
     end
 end
 
+function RFP.ON(idBinding, strCommand, tParams)
+    local turnOnServiceCall = {
+        domain = "light",
+        service = "turn_on",
+
+        service_data = {},
+
+        target = {
+            entity_id = EntityID
+        }
+    }
+    tParams = {
+        JSON = JSON:encode(turnOnServiceCall)
+    }
+    C4:SendToProxy(999, "HA_CALL_SERVICE", tParams)
+end
+
+function RFP.OFF(idBinding, strCommand, tParams)
+    local turnOnServiceCall = {
+        domain = "light",
+        service = "turn_off",
+
+        service_data = {},
+
+        target = {
+            entity_id = EntityID
+        }
+    }
+    tParams = {
+        JSON = JSON:encode(turnOnServiceCall)
+    }
+    C4:SendToProxy(999, "HA_CALL_SERVICE", tParams)
+end
+
 function RFP.DO_PUSH(idBinding, strCommand, tParams)
     --Do nothing for now
 end
