@@ -27,6 +27,22 @@ function RFP.BUTTON_ACTION(idBinding, strCommand, tParams)
     end
 end
 
+function RFP.PUSH_SCENE(idBinding, strCommand, tParams)
+    local scene_value = C4:ParseXml(tParams.ELEMENTS)
+    C4:PersistSetValue("ALS:" .. tParams.SCENE_ID, scene_value, false) 
+end
+
+function RFP.ACTIVATE_SCENE(idBinding, strCommand, tParams)
+    local scene_value = C4:PersistGetValue("ALS:" .. tParams.SCENE_ID, false) 
+    print("Loading Advanced Lighting Scene " .. tParams.SCENE_ID)
+    for _, v in pairs(scene_value["ChildNodes"]) do
+        if v["Name"] == "level" or v["Name"] == "brightness" then
+            SetLightValue(v["Value"]) 
+            break
+        end
+    end
+end
+
 function RFP.ON(idBinding, strCommand, tParams)
     local turnOnServiceCall = {
         domain = "light",
@@ -45,7 +61,7 @@ function RFP.ON(idBinding, strCommand, tParams)
 end
 
 function RFP.OFF(idBinding, strCommand, tParams)
-    local turnOnServiceCall = {
+    local turnOffServiceCall = {
         domain = "light",
         service = "turn_off",
 
@@ -56,7 +72,7 @@ function RFP.OFF(idBinding, strCommand, tParams)
         }
     }
     tParams = {
-        JSON = JSON:encode(turnOnServiceCall)
+        JSON = JSON:encode(turnOffServiceCall)
     }
     C4:SendToProxy(999, "HA_CALL_SERVICE", tParams)
 end

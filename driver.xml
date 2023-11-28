@@ -6,7 +6,7 @@
 	<model>HA Light</model>
 	<created>09/10/2023 12:00</created>
 	<modified>11/26/2023 12:00</modified>
-	<version>106</version>
+	<version>107</version>
 	<control>lua_gen</control>
 	<controlmethod>IP</controlmethod>
 	<driver>DriverWorks</driver>
@@ -52,6 +52,7 @@
 		<load_group_support>True</load_group_support>
 		<brightness_rate_min>0</brightness_rate_min>
 		<brightness_rate_max>100000</brightness_rate_max>
+		<advanced_scene_support>True</advanced_scene_support>
 	</capabilities>
 	<events/>
 	<connections>
